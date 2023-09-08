@@ -12,3 +12,5 @@ class ClienteModels(db.Model):
     endereco_uf = db.Column(db.String, nullable=False)
     telefone = db.Column(db.String(11), nullable=False)
     email = db.Column(db.String, nullable=False)
+
+    agendamentos = db.relationship("AgendamentoModels", back_populates="clientes", lazy="dynamic")

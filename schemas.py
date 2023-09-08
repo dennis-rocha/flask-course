@@ -1,6 +1,6 @@
 from marshmallow import fields, Schema
 
-class ClienteSchema (Schema):
+class PlainClienteSchema (Schema):
     id = fields.Int(dump_only=True)
     nome = fields.Str(required=True)
     endereco_logradouro = fields.Str(required=True)
@@ -12,8 +12,14 @@ class ClienteSchema (Schema):
     telefone = fields.Str(required=True)
     email = fields.Str(required=True)
 
-class AgendamentoSchema (Schema):
+class PlainAgendamentoSchema (Schema):
     id = fields.Int(dump_only=True)
     data = fields.Date(required=True)
-    cliente_id = fields.Int()
-    cliente = fields.Nested(ClienteSchema,only=('id','nome'))
+
+class ClienteSchema(PlainClienteSchema):
+    agendamento = fields.List(fields.Nested(lambda: AgendamentoSchema()), dump_only=True)
+
+class AgendamentoSchema(PlainAgendamentoSchema):
+    cliente_id = fields.Int(required=True, load_only=True)
+    clientes = fields.Nested(lambda: ClienteSchema(), dump_only=True)
+    

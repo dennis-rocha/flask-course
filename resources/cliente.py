@@ -23,7 +23,8 @@ class Cliente(MethodView):
         try:
             db.session.add(item)
             db.session.commit()
-        except:
+        except Exception as err:
+            print(err)
             abort(500, "Ocorreu um erro ao salvar os dados")
         
         return item
